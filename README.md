@@ -8,4 +8,4 @@ Hydra is started at the [2015 AEC TECH Hackathon](http://aec-technology-hackatho
 ![Dynamo Node](https://raw.githubusercontent.com/HydraShare/hydra-dynamo/master/resources/Dynamo_node.JPG)
 
 ## Don't share files, share Hydras!
-![Screenshot](https://github.com/HydraShare/hydra/raw/installation/Imgs/Concept_Chart.jpg)
+![Screenshot](https://raw.githubusercontent.com/HydraShare/hydra-dynamo/master/resources/Concept_Chart_Dynamo.jpg)
