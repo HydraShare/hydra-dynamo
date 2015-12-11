@@ -27,31 +27,31 @@ C:\Users\Keith\Desktop\Hydra9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\
 C:\Users\Keith\Desktop\Hydra9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\en-US\SampleLibraryUI.resources.dll
 C:\Users\Keith\Desktop\Hydra9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.dll
 C:\Users\Keith\Desktop\Hydra9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.pdb
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\SampleLibraryUI.dll.config
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\en-US\SampleLibraryUI.XML
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\SampleLibraryUI.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\SampleLibraryUI.pdb
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\SampleLibraryUI.XML
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\en-US\SampleLibraryUI.resources.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\CoreNodeModelsWpf.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\DSCoreNodesUI.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoCore.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoCoreWpf.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoServices.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoShapeManager.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoUtilities.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\ProtoCore.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\ProtoGeometry.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\ProtoInterface.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\Newtonsoft.Json.xml
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\Hydra.csprojResolveAssemblyReference.cache
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\Controls\HelloDynamoControl.baml
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\Controls\HelloDynamoControl.g.cs
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI_MarkupCompile.cache
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.Properties.Resources.resources
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.Properties.Resources.en-US.resources
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\Hydra.csproj.GenerateResource.Cache
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.g.en-US.resources
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\en-US\SampleLibraryUI.resources.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.dll
-C:\Users\Keith\Documents\GitHub\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.pdb
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\en-US\SampleLibraryUI.XML
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\Controls\HelloDynamoControl.baml
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\Controls\HelloDynamoControl.g.cs
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI_MarkupCompile.cache
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.Properties.Resources.resources
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.Properties.Resources.en-US.resources
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\Hydra.csproj.GenerateResource.Cache
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.pdb
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\SampleLibraryUI.dll.config
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\SampleLibraryUI.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\SampleLibraryUI.pdb
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\SampleLibraryUI.XML
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\en-US\SampleLibraryUI.resources.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\CoreNodeModelsWpf.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\DSCoreNodesUI.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoCore.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoCoreWpf.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoServices.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoShapeManager.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\DynamoUtilities.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\ProtoCore.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\ProtoGeometry.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\ProtoInterface.dll
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.g.en-US.resources
+C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\en-US\SampleLibraryUI.resources.dll
