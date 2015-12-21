@@ -71,8 +71,6 @@ C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibrary
 C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\ProtoCore.dll
 C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\ProtoGeometry.dll
 C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\ProtoInterface.dll
-C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\bin\Debug\Newtonsoft.Json.xml
-C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\Hydra.csprojResolveAssemblyReference.cache
 C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\Controls\HelloDynamoControl.baml
 C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\Controls\HelloDynamoControl.g.cs
 C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI_MarkupCompile.cache
@@ -83,3 +81,4 @@ C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibrary
 C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\en-US\SampleLibraryUI.resources.dll
 C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.dll
 C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.pdb
+C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\SampleLibraryUI.SampleLibraryUIImages.resources
