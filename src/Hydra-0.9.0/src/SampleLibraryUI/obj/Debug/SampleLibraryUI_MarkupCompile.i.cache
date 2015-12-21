@@ -4,7 +4,7 @@
 library
 C#
 .cs
-C:\Users\Keith\Desktop\Hydra 0.9\DynamoSamples-0.9.0\src\SampleLibraryUI\obj\Debug\
+C:\Users\ksobon\Google Drive\Work\hydra-dynamo\src\Hydra-0.9.0\src\SampleLibraryUI\obj\Debug\
 SampleLibraryUI
 none
 false
@@ -12,8 +12,8 @@ TRACE;DEBUG
 
 11139099511
 
-101051420421
-27-1925860351
+1018143784
+271740284824
 Controls\HelloDynamoControl.xaml;
 
 False
