@@ -155,6 +155,10 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SampleLibraryUI.Examples.HydraShare.Large.png" />
+    <EmbeddedResource Include="Resources\SampleLibraryUI.Examples.HydraShare.Small.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
