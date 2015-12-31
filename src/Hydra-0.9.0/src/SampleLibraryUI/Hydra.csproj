@@ -150,6 +150,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.en-US.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="SampleLibraryUIImages.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -169,6 +170,11 @@
     </PreBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild">
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+    </GetReferenceAssemblyPaths>
+    <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)SampleLibraryUIImages.resx" OutputResources="$(ProjectDir)SampleLibraryUIImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
+    <AL TargetType="library" EmbedResources="$(ProjectDir)SampleLibraryUIImages.resources" OutputAssembly="$(OutDir)SampleLibraryUI.customization.dll" />
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>

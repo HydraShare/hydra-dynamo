@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
-using System.Collections;
 using System.Collections.Generic;
 using Autodesk.DesignScript.Runtime;
 using Dynamo.Controls;
@@ -21,7 +20,6 @@ namespace SampleLibraryUI.Examples
      * This file is part of Hydra
      
      * Use this component to export your dyn file to your Hydra repository so that you can upload and share with the community!
-     * Provided by Hydra 0.0.1
 
      * Args:
      *      fileName: A text name for your example file.
@@ -29,7 +27,7 @@ namespace SampleLibraryUI.Examples
      *      versionNumber: A numerical input for the example file version.
      *      changeLog_: A text description of the changes that you have made to the file if this is a new version of an old example file.
      *      fileTags_: An optional list of test tags to decribe your example file.  This will help others search for your file easily.
-     *      targetFolder_: Input a file path here to the hydra folder on you machine if you are not using the default Github structure that places your hydra github repo in your documents folder.
+     *      targetFolder_: Input a directory path here to the hydra folder on you machine if you are not using the default Github structure that places your hydra github repo in your documents folder.
      *      additionalImgs_: A list of file paths to additional images that you want to be shown in your Hydra page
      * Returns:
      *      Empty
@@ -42,7 +40,7 @@ namespace SampleLibraryUI.Examples
     [NodeCategory("Hydra")]
 
     // The description will display in the tooltip
-    [NodeDescription("Export Dynamo File to Hydra Repository")]
+    [NodeDescription("Export Dynamo Files to Hydra Repository")]
 
     // Add the IsDesignScriptCompatible attribute to ensure that it gets loaded in Dynamo.
     [IsDesignScriptCompatible]
@@ -215,8 +213,6 @@ namespace SampleLibraryUI.Examples
                 var fileTagsIndex = model.InPorts[4].Connectors[0].Start.Index;
                 var fileTagsId = fileTagsnode.GetAstIdentifierForOutputIndex(fileTagsIndex).Name;
                 var fileTagsMirror = nodeView.ViewModel.DynamoViewModel.Model.EngineController.GetMirror(fileTagsId);
-                //var fileTagz = fileTagsMirror.GetData().Data as object;
-                //var collectionTest = fileTagsMirror.GetData().IsCollection;
                 var fileTags = fileTagsMirror.GetStringData() as string;
                 List<string> fileTagsList = new List<string>();
 
@@ -264,7 +260,7 @@ namespace SampleLibraryUI.Examples
                     fileTagsList.Add(fileTags);
                 }
 
-                //if Tag list doesnt contain "Dynamo" add it
+                //if Tag list doesn't contain "Dynamo" add it
                 if (fileTagsList.Contains("Dynamo") == false && fileTags.Contains("dynamo") == false)
                 {
                 fileTagsList.Add("Dynamo");
@@ -291,24 +287,86 @@ namespace SampleLibraryUI.Examples
                 List<string> versionList = new List<string>();
                 versionList.Add(versionNumber.ToString());
 
+                //Component dictionary
                 Dictionary<string, int> components = new Dictionary<string, int>
                 {
-                    {"Dynamo", 1},
-                    {"Hydra", 1 }
                 };
+                
+                //Create list of components
+                List<string> componentList = new List<string>();
+                foreach(var node in graph.Nodes)
+                {
+                    componentList.Add(node.NickName);
+                }
+                //Add component to dictionary or increment count
+                foreach(string component in componentList)
+                {
+                    if(!components.Keys.Contains(component))
+                    {
+                        components.Add(component, 1);
+                    }
+                    else if(components.Keys.Contains(component))
+                    {
+                        components[component] += 1;
+                    }
+                }
 
+                //create stock categories list
+                //this should be rewritten referencing builtincategories
+                List<string> stockDependencies = new List<string>();
+                stockDependencies.Add("Analyze");
+                stockDependencies.Add("BuiltIn");
+                stockDependencies.Add("Core");
+                stockDependencies.Add("Display");
+                stockDependencies.Add("Geometry");
+                stockDependencies.Add("Office");
+                stockDependencies.Add("Operators");
+                stockDependencies.Add("Input/Output");
+                
+                //check to see if node is in stock category
+                //if not in category add as dependency
+                List<string> dependencies = new List<string>();
+                string dependentCategory;
+                foreach (var node in graph.Nodes)
+                {
+                    if(stockDependencies.Any(node.Category.Contains) == false)
+                    {
+                        if (node.Category.Contains('.'))
+                        {
+                            int index = node.Category.IndexOf('.');
+                            dependentCategory = node.Category.Substring(0, index);
+                        }
+                        else
+                        {
+                            dependentCategory = node.Category;
+                        }
+
+                        if (!dependencies.Contains(dependentCategory) && dependentCategory != "")
+                        {
+                            dependencies.Add(dependentCategory);
+                        }
+                    }
+                }
+
+                //dictionary for future image options
+                Dictionary<string, string> images = new Dictionary<string, string>
+                {
+                    {"capture.png", "Dynamo Definition"}
+                };
+                List<object> imageList = new List<object>();
+                imageList.Add(images);
+
+                //metadata for JSON
                 Dictionary<string, object> metaDataDict = new Dictionary<string, object>
                 {
-                    {"versions", versionList},
+                    {"file", fileName + ".zip"},
+                    {"thumbnail", "thumbnail.png"},
+                    {"images", imageList},
+                    //add video option
+                    {"videos", "none"},
                     {"tags", fileTagsList},
                     {"components", components},
-                    //change to dynimg
-                    {"ghimg", "capture.png"},
-                    {"thumbnail", "thumbnail.png"},
-                    {"file", fileName + ".zip"},
-                    {"date", now},
-                    //change to model view
-                    {"rhinoimg", "capture.png"}
+                    {"dependencies", dependencies}
                 };
 
                 //Check to see if master folder already exists
