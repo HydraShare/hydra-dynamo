@@ -235,7 +235,8 @@ namespace Hydra
                     var dynamoSavePath = (newFolderPath + "\\" + "tempFolder" + "\\" + fileName + ".dyn");
                     var tempFolder = (newFolderPath + "\\" + "tempFolder");
                     var zipPath = (newFolderPath + "\\" + fileName + ".zip");
-                    var imageSavePath = (newFolderPath + "\\capture.png");
+                    var canvasSavePath = (newFolderPath + "\\canvas.png");
+                    var backgroundSavePath = (newFolderPath + "\\background.png");
                     var jsonPath = (newFolderPath + "\\input.json");
                     var readMePath = (newFolderPath + "\\README.md");
                     var thumbNailPath = (newFolderPath + "\\thumbnail.png");
@@ -308,7 +309,8 @@ namespace Hydra
                     //dictionary for future image options
                     Dictionary<string, string> images = new Dictionary<string, string>
                 {
-                    {"capture.png", "Dynamo Definition"}
+                    {"canvas.png", "Dynamo Definition"},
+                    {"background.png", "Dynamo Background Preview"}
                 };
                     List<object> imageList = new List<object>();
                     imageList.Add(images);
@@ -345,10 +347,13 @@ namespace Hydra
                     Directory.Delete(tempFolder, true);
 
                     //Save Graph Image
-                    nodeView.ViewModel.DynamoViewModel.OnRequestSaveImage(nodeView, new ImageSaveEventArgs(imageSavePath));
+                    nodeView.ViewModel.DynamoViewModel.OnRequestSaveImage(nodeView, new ImageSaveEventArgs(canvasSavePath));
+
+                    //Save Background Preview Image
+                    nodeView.ViewModel.DynamoViewModel.OnRequestSave3DImage(nodeView, new ImageSaveEventArgs(backgroundSavePath));
 
                     //Save Thumbnail
-                    var fullSize = System.Drawing.Image.FromFile(imageSavePath);
+                    var fullSize = System.Drawing.Image.FromFile(backgroundSavePath);
                     var thumbnail = fullSize.GetThumbnailImage(200, 85, () => false, IntPtr.Zero);
                     thumbnail.Save(thumbNailPath);
 
