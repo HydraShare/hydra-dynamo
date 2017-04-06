@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HydraDynamo", "HydraDynamo\HydraDynamo.csproj", "{9BCA313F-E90A-4602-AFCD-C1E9BA0B9617}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HydraHelperFunctions", "HydraHelperFunctions\HydraHelperFunctions.csproj", "{B90173A7-1C8C-4F05-8440-D0B67E07902D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BCA313F-E90A-4602-AFCD-C1E9BA0B9617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BCA313F-E90A-4602-AFCD-C1E9BA0B9617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BCA313F-E90A-4602-AFCD-C1E9BA0B9617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BCA313F-E90A-4602-AFCD-C1E9BA0B9617}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B90173A7-1C8C-4F05-8440-D0B67E07902D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B90173A7-1C8C-4F05-8440-D0B67E07902D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B90173A7-1C8C-4F05-8440-D0B67E07902D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B90173A7-1C8C-4F05-8440-D0B67E07902D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
