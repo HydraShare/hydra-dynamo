@@ -5,7 +5,5 @@ Hydra is started at the [2015 AEC TECH Hackathon](http://aec-technology-hackatho
 
 ### This repository only contains [Dynamo](http://dynamobim.com) node for Hydra. [Read here to learn how to use the node to create Hydras](https://github.com/HydraShare/hydra/wiki).
 
-![Dynamo Node](https://raw.githubusercontent.com/HydraShare/hydra-dynamo/master/resources/Dynamo_node.JPG)
-
 ## Don't share files, share Hydras!
 ![Screenshot](https://raw.githubusercontent.com/HydraShare/hydra-dynamo/master/resources/Concept_Chart_Dynamo.jpg)
