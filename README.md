@@ -1,4 +1,4 @@
-# hydra-dynamo
+# Hydra-Dynamo
 [Hydra](https://github.com/HydraShare/hydra#hydra) is a web platform that allows users to share example files from [Dynamo](https://github.com/DynamoDS/Dynamo) directly to the [Hydra Web Repo](http://hydrashare.github.io/hydra/) using GitHub.  You can efficiently export your scripts to the Hydra repository using the Dynamo node for sharing and community interaction! There are a number of built in features to help organize, categorize, and preview your files online without having to download to make sure you are getting exactly what you expect.
 
 ![Hydra Component](https://github.com/HydraShare/hydra-dynamo/blob/master/resources/Hydra_Node_Sample.jpg?raw=true)
