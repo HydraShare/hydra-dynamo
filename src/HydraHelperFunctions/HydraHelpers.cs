@@ -56,8 +56,8 @@ namespace Hydra.HydraHelperFunctions
 
             // define all file paths
             string newFolderPath = (targetFolder + "\\" + fileName);
-            string dynamoSavePath = (newFolderPath + "\\" + "tempFolder" + "\\" + fileName + ".dyn");
-            string tempFolder = (newFolderPath + "\\" + "tempFolder");
+            string tempFolder = Path.GetTempPath() + "\\tempFolder";
+            string dynamoSavePath = (tempFolder + "\\" + fileName + ".dyn");
             string zipPath = (newFolderPath + "\\" + fileName + ".zip");
             string canvasSavePath = (newFolderPath + "\\canvas.png");
             string backgroundSavePath = (newFolderPath + "\\background.png");
@@ -296,7 +296,7 @@ namespace Hydra.HydraHelperFunctions
 
             // TODO uncomment for version 1.4.0 (OnRequestSave3DImage not exposed in 1.2.0 or 1.3.0)
             // save background preview capture
-            //nodeView.ViewModel.DynamoViewModel.OnRequestSave3DImage(model, new ImageSaveEventArgs(backgroundSavePath));
+            nodeView.ViewModel.DynamoViewModel.OnRequestSave3DImage(model, new ImageSaveEventArgs(backgroundSavePath));
 
             // TODO provide option for background preview or canavs imagery for thumbnail in 1.3
             // save thumbnail
