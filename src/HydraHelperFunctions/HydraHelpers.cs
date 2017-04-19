@@ -33,19 +33,29 @@ namespace Hydra.HydraHelperFunctions
             return data;
         }
 
-        // do work (grabs latest input data from the global data container)
-        public static void exportToHydra(Object model, NodeView nodeView)
+        // this test is used by the button to make sure no work is done 
+        // in the case that an input port recieves any type other than strings
+        public static bool testInputs()
         {
-            // test to verify no inputs return a null value
+            // test result
+            bool result = true;
+            
+            // test to verify all inputs return a string
             for (int i = 0; i < data.Length; i++)
             {
-                // if null found break before doing any work
-                if (data[i].Equals(null) == true)
+                // if data isn't string change result
+                if ((data[i] is string) != true)
                 {
-                    break;
+                    result = false;
                 }
             }
 
+            return result;
+        }
+
+        // do work (grabs latest input data from the global data container)
+        public static void exportToHydra(Object model, NodeView nodeView)
+        {
             // grab all input values and store in appropriate variables
             string fileName = data[0];
             string fileDescription = data[1];

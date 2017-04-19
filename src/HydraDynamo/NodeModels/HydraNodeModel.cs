@@ -88,9 +88,6 @@ namespace Hydra
 
         private void ShowMessage(object obj)
         {
-            // TODO this logic has to be revised for 1.3
-            // API changes remove !HasConnectedInput
-
             // only run if all input ports are connected
             if (!HasConnectedInput(0) || !HasConnectedInput(1) || !HasConnectedInput(2) || !HasConnectedInput(3) || !HasConnectedInput(4) || !HasConnectedInput(5))
             {
@@ -99,7 +96,12 @@ namespace Hydra
 
             else
             {
-                this.RequestSave();
+                // verify all inputs are strings
+                if (HydraHelpers.testInputs() == true)
+                {
+                    // do hydra work
+                    this.RequestSave();
+                }
             }
         }
 
