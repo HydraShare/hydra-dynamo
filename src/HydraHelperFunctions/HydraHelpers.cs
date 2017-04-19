@@ -292,11 +292,11 @@ namespace Hydra.HydraHelperFunctions
             Directory.Delete(tempFolder, true);
 
             // save graph capture
-            nodeView.ViewModel.DynamoViewModel.OnRequestSaveImage("Hydra", new ImageSaveEventArgs(canvasSavePath));
+            nodeView.ViewModel.DynamoViewModel.OnRequestSaveImage(model, new ImageSaveEventArgs(canvasSavePath));
 
-            // TODO uncomment for version 1.3 (OnRequestSave3DImage not exposed in 1.2)
+            // TODO uncomment for version 1.4.0 (OnRequestSave3DImage not exposed in 1.2.0 or 1.3.0)
             // save background preview capture
-            //nodeView.ViewModel.DynamoViewModel.OnRequestSave3DImage("Hydra", new ImageSaveEventArgs(backgroundSavePath));
+            //nodeView.ViewModel.DynamoViewModel.OnRequestSave3DImage(model, new ImageSaveEventArgs(backgroundSavePath));
 
             // TODO provide option for background preview or canavs imagery for thumbnail in 1.3
             // save thumbnail
