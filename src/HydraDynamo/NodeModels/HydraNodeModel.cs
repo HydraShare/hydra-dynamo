@@ -97,7 +97,10 @@ namespace Hydra
                 return;
             }
 
-            this.RequestSave();
+            else
+            {
+                this.RequestSave();
+            }
         }
 
         public override IEnumerable<AssociativeNode> BuildOutputAst(List<AssociativeNode> inputAstNodes)
