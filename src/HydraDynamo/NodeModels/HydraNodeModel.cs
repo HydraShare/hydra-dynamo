@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using Dynamo.Graph.Nodes;
 using Dynamo.Controls;
 using Dynamo.UI.Commands;
 using Dynamo.Wpf;
 using Autodesk.DesignScript.Runtime;
 using ProtoCore.AST.AssociativeAST;
+using Newtonsoft.Json;
 using Hydra.HydraHelperFunctions;
 
 namespace Hydra
@@ -30,106 +33,208 @@ namespace Hydra
     /// Hydra node implementation.
     /// </summary>
     [NodeName("Hydra")]
-    [NodeDescription("Export Dynamo files to Hydra repository so that you can upload and share with the community!")]
     [NodeCategory("Hydra")]
-    [InPortNames("fileName", "fileDescription", "versionNumber", "changeLog", "fileTags", "targetFolder")]
-    [InPortTypes("string", "string", "string", "string", "string", "string")]
-    [InPortDescriptions(
-    "A name for your example file",
-    "A description of your example file",
-    "A version number for your example file",
-    "A description of changes made to file compared to an older version",
-    "A string of tags (seperated by commas) to describe your file",
-    "A directory path to Hydra folder (by default this is in your documents folder)"
-    )]
-    [OutPortNames("readMe")]
-    [OutPortTypes("string[]")]
-    [OutPortDescriptions("null if incomplete")]
+    [NodeDescription("Export Dynamo files to Hydra repository so that you can upload and share with the community!")]
+    [OutPortTypes("string")]
     [IsDesignScriptCompatible]
-    public class HydraShare : NodeModel
+    public class HydraNodeModel : NodeModel
     {
-        private string message;
+        #region Private Node Properties
+        private string fileName = "hydraExampleFile";
+        private string description = "This is an example description.";
+        private string version = "2.0.0";
+        private string changeLog = "Notes:\n - New Node UI\n - Dynamo 2.0 Compliant";
+        private string fileTags = "hydra, dynamo, upload, example, share, sample";
+        private string targetFolder = @"C:\Users\alfarok\Desktop\HydraTest";
+        private Dynamo.ViewModels.DynamoViewModel dynamoModel;
+        #endregion
 
-        // request save action.
-        public Action RequestSave;
-
-        // a message that will appear on the button
-        public string Message
+        #region Public Node Properties
+        // Text that will appear in node text fields
+        public string FileName
         {
-            get { return message; }
+            get { return fileName; }
             set
             {
-                message = value;
-                // raise a property changed notification
-                // to alert the UI that an element needs
-                // an update.
-                RaisePropertyChanged("NodeMessage");
+                fileName = value;
+                RaisePropertyChanged("NodeFileName");
             }
         }
 
-        // DelegateCommand objects allow you to bind
-        // UI interaction to methods on your data context.
-        [IsVisibleInDynamoLibrary(false)]
-        public DelegateCommand MessageCommand { get; set; }
-
-        public HydraShare()
+        public string Description
         {
-            RegisterAllPorts();
-            ArgumentLacing = LacingStrategy.Disabled;
-            MessageCommand = new DelegateCommand(ShowMessage, CanShowMessage);
-            // latest build hides this message from being displayed on button
-            Message = "Share";
+            get { return description; }
+            set
+            {
+                description = value;
+                RaisePropertyChanged("NodeDescription");
+            }
         }
 
-        private static bool CanShowMessage(object obj)
+        public string Version
+        {
+            get { return version; }
+            set
+            {
+                version = value;
+                RaisePropertyChanged("NodeVersion");
+            }
+        }
+
+        public string ChangeLog
+        {
+            get { return changeLog; }
+            set
+            {
+                changeLog = value;
+                RaisePropertyChanged("NodeChangeLog");
+            }
+        }
+
+        public string FileTags
+        {
+            get { return fileTags; }
+            set
+            {
+                fileTags = value;
+                RaisePropertyChanged("NodeFileTags");
+            }
+        }
+
+        public string TargetFolder
+        {
+            get { return targetFolder; }
+            set
+            {
+                targetFolder = value;
+                RaisePropertyChanged("NodeTargetFolder");
+            }
+        }
+
+        [JsonIgnore]
+        public Dynamo.ViewModels.DynamoViewModel DynamoModel
+        {
+            get { return dynamoModel; }
+            set
+            {
+                dynamoModel = value;
+                RaisePropertyChanged("NodeDynamoModel");
+            }
+        }
+
+        #endregion
+
+        #region DelegateCommand
+        // Bind UI interaction to methods on data context
+        [JsonIgnore]
+        [IsVisibleInDynamoLibrary(false)]
+        public DelegateCommand SubmitCommand { get; set; }
+        #endregion
+
+        #region Constructors
+        public HydraNodeModel()
+        {
+            OutPorts.Add(new PortModel(PortType.Output, this, new PortData("Results", "Null if incomplete.")));
+            RegisterAllPorts();
+            ArgumentLacing = LacingStrategy.Disabled;
+            SubmitCommand = new DelegateCommand(SubmitData, CanSubmitData);
+        }
+
+        [JsonConstructor]
+        public HydraNodeModel(IEnumerable<PortModel> inPorts, IEnumerable<PortModel> outPorts) : base(inPorts, outPorts)
+        {
+            SubmitCommand = new DelegateCommand(SubmitData, CanSubmitData);
+        }
+        #endregion
+
+        #region Command Messages
+        private static bool CanSubmitData(object obj)
         {
             return true;
         }
 
-        private void ShowMessage(object obj)
+        private void SubmitData(object obj)
         {
-            // only run if all input ports are connected
-            if (!HasConnectedInput(0) || !HasConnectedInput(1) || !HasConnectedInput(2) || !HasConnectedInput(3) || !HasConnectedInput(4) || !HasConnectedInput(5))
-            {
-                return;
-            }
+            // TODO this can be remove or turned off
+            MessageBox.Show(
+                this.FileName + "\n" +
+                this.Description + "\n" +
+                this.Version + "\n" +
+                this.ChangeLog + "\n" +
+                this.FileTags + "\n" +
+                this.TargetFolder
+                );
 
-            else
+            // Wrap input data
+            string[] data = new string[]
             {
-                // verify all inputs are strings
-                if (HydraHelpers.testInputs() == true)
-                {
-                    // do hydra work
-                    this.RequestSave();
-                }
-            }
+                this.FileName,
+                this.Description,
+                this.Version,
+                this.ChangeLog,
+                this.FileTags,
+                this.TargetFolder
+            };
+
+            // TODO remove DynamoModel parameter
+            // Build local Hydra files
+            HydraHelpers.exportToHydra(this, this.DynamoModel, data);
+
         }
+        #endregion
 
+        #region Build Output AST
         public override IEnumerable<AssociativeNode> BuildOutputAst(List<AssociativeNode> inputAstNodes)
         {
-            // the helper function must be in a seperate assembly to avoid dereferencing pointer error
-            // must also specify this assembly in pkg file
-            var functionCall =
-                AstFactory.BuildFunctionCall(
-                    new Func<string, string, string, string, string, string, string[]>(HydraHelpers.collectData),
-                    new List<AssociativeNode> { inputAstNodes[0], inputAstNodes[1], inputAstNodes[2], inputAstNodes[3], inputAstNodes[4], inputAstNodes[5] });
-
-            return new[] { AstFactory.BuildAssignment(GetAstIdentifierForOutputIndex(0), functionCall) };
-        }
-
-        public class CustomNodeModelNodeViewCustomization : INodeViewCustomization<HydraShare>
-        {
-            public void CustomizeView(HydraShare model, NodeView nodeView)
+            // TODO if any null inputs return null node
+            if(false)
             {
-                var hydraControl = new HydraShareControl();
+                return new[]
+                {
+                    AstFactory.BuildAssignment(GetAstIdentifierForOutputIndex(0), AstFactory.BuildNullNode())
+                };
+            }
+            else
+            {
+                return new[]
+                {
+                    AstFactory.BuildAssignment(GetAstIdentifierForOutputIndex(0), 
+                    AstFactory.BuildStringNode
+                    (
+                        this.FileName + "\n" +
+                        this.Description + "\n" +
+                        this.Version + "\n" +
+                        this.ChangeLog + "\n" +
+                        this.FileTags + "\n" +
+                        this.TargetFolder
+                        ))
+                };
+            }
+        }
+        #endregion
+
+        #region Node View Customization
+        public class CustomNodeModelNodeViewCustomization : INodeViewCustomization<HydraNodeModel>
+        {
+            public void CustomizeView(HydraNodeModel model, NodeView nodeView)
+            {
+                HydraShareControl hydraControl = new HydraShareControl();
                 nodeView.inputGrid.Children.Add(hydraControl);
+
+                // TODO - VERIFY THIS IS SAFE (COULD BE A TERRIBLE IDEA...)
+                // Store a reference to the DynamoViewModel
+                model.DynamoModel = nodeView.ViewModel.DynamoViewModel;
+
+                // Set the data context for our control to be the node model.
+                // Properties in this class which are data bound will raise 
+                // property change notifications which will update the UI.
                 hydraControl.DataContext = model;
-                model.RequestSave += () => HydraHelpers.exportToHydra(model, nodeView);
             }
 
             public void Dispose()
             {
             }
         }
+        #endregion
     }
 }

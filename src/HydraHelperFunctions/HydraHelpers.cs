@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Dynamo.Controls;
+using Dynamo.Graph.Nodes;
+using Dynamo.Graph.Workspaces;
 using Dynamo.ViewModels;
 using Autodesk.DesignScript.Runtime;
 
@@ -14,60 +16,48 @@ namespace Hydra.HydraHelperFunctions
     [IsVisibleInDynamoLibrary(false)]
     public class HydraHelpers
     {
-        // create container for all input data
-        public static string[] data = new string[6];
+        private static string[] inputData;
 
-        // get input data
-        // this method is called immedietly when the node runs and passes the data to the output
-        public static string[] collectData(string fileName, string fileDescription, string versionNumber, string changeLog, string fileTags, string targetFolder)
+        // Container for all input data
+        public static string[] InputData
         {
-            // store most current input data in global data container
-            data[0] = fileName;
-            data[1] = fileDescription;
-            data[2] = versionNumber;
-            data[3] = changeLog;
-            data[4] = fileTags;
-            data[5] = targetFolder;
-
-            // return data list as output for node
-            return data;
+            get { return inputData; }
+            set { inputData = value; }
         }
 
-        // this test is used by the button to make sure no work is done 
-        // in the case that an input port recieves any type other than strings
-        public static bool testInputs()
+        // Build local Hydra repository
+        public static void exportToHydra(NodeModel model, DynamoViewModel dynamoViewModel, string[] data)
         {
-            // test result
-            bool result = true;
-            
-            // test to verify all inputs return a string
-            for (int i = 0; i < data.Length; i++)
+            InputData = data;
+
+            if(InputData.Count() != 6)
             {
-                // if data isn't string change result
-                if ((data[i] is string) != true)
+                MessageBox.Show("Incorrect input count.");
+                return;
+            }
+
+            // If missing any data inputs break
+            for (int i = 0; i < InputData.Count(); i++)
+            {
+                if (InputData[i] == null || InputData[i] == "")
                 {
-                    result = false;
+                    MessageBox.Show("Invalid field input.");
+                    return;
                 }
             }
 
-            return result;
-        }
-
-        // do work (grabs latest input data from the global data container)
-        public static void exportToHydra(Object model, NodeView nodeView)
-        {
-            // grab all input values and store in appropriate variables
-            string fileName = data[0];
-            string fileDescription = data[1];
-            string versionNumber = data[2];
-            string changeLog = data[3];
-            string fileTags = data[4];
-            string targetFolder = data[5];
+            // Get nodeTextInput()
+            string fileName = InputData[0];
+            string fileDescription = InputData[1];
+            string versionNumber = InputData[2];
+            string changeLog = InputData[3];
+            string fileTags = InputData[4];
+            string targetFolder = InputData[5];
 
             // define all file paths
             string newFolderPath = (targetFolder + "\\" + fileName);
-            string tempFolder = Path.GetTempPath() + "\\tempFolder";
-            string dynamoSavePath = (tempFolder + "\\" + fileName + ".dyn");
+            string dynamoSavePath = (newFolderPath + "\\" + "tempFolder" + "\\" + fileName + ".dyn");
+            string tempFolder = (newFolderPath + "\\" + "tempFolder");
             string zipPath = (newFolderPath + "\\" + fileName + ".zip");
             string canvasSavePath = (newFolderPath + "\\canvas.png");
             string backgroundSavePath = (newFolderPath + "\\background.png");
@@ -76,37 +66,144 @@ namespace Hydra.HydraHelperFunctions
             string thumbNailPath = (newFolderPath + "\\thumbnail.png");
             DateTime now = DateTime.Now;
 
-            // get current graph
-            var graph = nodeView.ViewModel.DynamoViewModel.Model.CurrentWorkspace;
+            // Get current workspace model (graph)
+            WorkspaceModel graph = dynamoViewModel.Model.CurrentWorkspace;
 
             // TODO all these regions should be broken down to seperate functions
             // and called from within the export to Hydra function
 
-            #region Build Tag List
-            // list for file tags
+            // Build all Hydra data
+            List<string> fileTagsList = buildFileTags(fileTags);
+            Dictionary<string, int> components = buildActiveNodes(graph);
+            List<string> dependencies = buildDependencies(graph);
+            // TODO not sure why hydra schema calls for a list here
+            string[] versionList = new string[] { versionNumber };
+            List<Dictionary<string, string>> imageList = buildImages();
+            
+            // Build full metadata dictionary for json
+            Dictionary<string, object> metadataDict = new Dictionary<string, object>
+            {
+                {"file", fileName + ".zip"},
+                {"thumbnail", "thumbnail.png"},
+                { "images", imageList},
+                // TODO implement video option
+                {"videos", "none"},
+                {"tags", fileTagsList},
+                {"components", components},
+                {"dependencies", dependencies}
+            };
+
+            // Check File Paths and Write Files
+            try
+            {
+                // If master folder already exists delete it
+                if (Directory.Exists(newFolderPath))
+                {
+                    Directory.Delete(newFolderPath, true);
+                }
+
+                // Create master folder to hold Hydra content
+                Directory.CreateDirectory(newFolderPath);
+                // Create temporary folder to hold dynamo file before zip
+                Directory.CreateDirectory(tempFolder);
+
+                // Save dynamo file to hydra location
+                // UPDATE EVERYTHING BELOW HERE WHEN READING NODE UI DATA IS COMPLETE
+                // Check to make sure file has been saved
+                if (String.IsNullOrEmpty(dynamoViewModel.Model.CurrentWorkspace.FileName) == true)
+                {
+                    MessageBox.Show("This file has not yet been saved.  Please save to continue.");
+                    return;
+                }
+
+                // Check to make sure the current dyn file is up to date with the canvas
+                if (dynamoViewModel.Model.CurrentWorkspace.HasUnsavedChanges == true)
+                {
+                    // Alert user the canvas contained unsaved changes
+                    // If user proceeds imagery may not correspond with current dyn file
+                    MessageBox.Show("There are unsaved changes on the current canvas.  Hydra uses the last saved version of your Dynamo file.  This suggests imagery may not correspond with the last saved dyn file.");
+                }
+
+                // copy the last saved dyn file
+                File.Copy(dynamoViewModel.Model.CurrentWorkspace.FileName.ToString(), dynamoSavePath);
+
+                // zip dyn
+                ZipFile.CreateFromDirectory(tempFolder, zipPath);
+                // delete temporary folder
+                Directory.Delete(tempFolder, true);
+
+                // Save canvas imagery
+                dynamoViewModel.OnRequestSaveImage("Hydra", new ImageSaveEventArgs(canvasSavePath));
+
+                // Save background preview imagery
+                dynamoViewModel.OnRequestSave3DImage("Hydra", new ImageSaveEventArgs(backgroundSavePath));
+
+                // TODO provide option for background preview or canavs imagery for thumbnail in 1.3
+                // Save thumbnail
+                var fullSize = System.Drawing.Image.FromFile(canvasSavePath);
+                var thumbnail = fullSize.GetThumbnailImage(200, 85, () => false, IntPtr.Zero);
+                thumbnail.Save(thumbNailPath);
+                // Dispose or process may still be running when exporting multiple times causing crash
+                fullSize.Dispose();
+                thumbnail.Dispose();
+
+                // Write JSON from dictionary
+                string json = JsonConvert.SerializeObject(metadataDict);
+                File.WriteAllText(jsonPath, json);
+
+                // Write README.md
+                string Tags = null;
+                foreach (string item in fileTagsList)
+                {
+                    Tags += item + ",";
+                }
+                Tags = Tags.TrimEnd(',');
+                string readMe = String.Join(
+                    Environment.NewLine,
+                    "### Description",
+                    fileDescription,
+                    "### Version",
+                    "File Version: " + versionNumber,
+                    "### Tags",
+                    Tags);
+                File.WriteAllText(readMePath, readMe);
+            }
+
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        #region Utility Functions
+        private static List<string> buildFileTags(string fileTags)
+        {
+            // Output list for file tags
             List<string> fileTagsList = new List<string>();
 
-            // if list is provided remove curly braces and quotes
-            if (fileTags.Contains('{'))
+            // If list is provided remove curly braces and quotes
+            if (fileTags.Contains('['))
             {
-                fileTags = fileTags.Replace("{", "");
-                fileTags = fileTags.Replace("}", "");
+                fileTags = fileTags.Replace("[", "");
+                fileTags = fileTags.Replace("]", "");
                 fileTags = fileTags.Replace("\"", "");
             }
-            // if newline remove
+
+            // If newline remove
             else if (fileTags.Contains('\n'))
             {
                 fileTags = fileTags.Replace(System.Environment.NewLine, ",");
                 fileTags = fileTags.Replace("\"", "");
             }
-            // if string remove quotes
+
+            // If string remove quotes
             else if (fileTags.Contains('\"'))
             {
                 fileTags = fileTags.Replace("\"", "");
             }
 
             // TODO Only allow comma seperated tags
-            // determine delimiter used and split string into list
+            // Determine delimiter used and split string into list
             if (fileTags.Contains(','))
             {
                 fileTags = fileTags.Replace(" ", "");
@@ -125,219 +222,131 @@ namespace Hydra.HydraHelperFunctions
             {
                 fileTagsList = new List<string>(fileTags.Split(' '));
             }
-            // if no delimiter, newlines, or spaces add fileTag as single string to list
+            // If no delimiter, newlines, or spaces add fileTag as single string to list
             else
             {
                 fileTagsList.Add(fileTags);
             }
 
-            // if tag list doesn't contain "Dynamo" add it
+            // If tag list doesn't contain 'Dynamo' add it
             if (fileTagsList.Contains("Dynamo") == false && fileTags.Contains("dynamo") == false)
             {
                 fileTagsList.Add("Dynamo");
             }
-            #endregion
 
-            #region Build Version List
-            // TODO does this have to be list or should it be single string?
-            List<string> versionList = new List<string>();
-            versionList.Add(versionNumber.ToString());
-            #endregion
-
-            #region Build Dictionary of Active Nodes and List of Active Packages
-            // TODO rename components to nodes for Dynamo (will break if Hydra core isn't updated)
-            // node dictionary (contains all nodes currently on canvas) 
-            Dictionary<string, int> components = new Dictionary<string, int> { };
-
-            foreach (var node in graph.Nodes)
+            // If tag list doesn't contain 'Hydra' add it
+            if (fileTagsList.Contains("Hydra") == false && fileTags.Contains("hydra") == false)
             {
-                // get node name as string
-                string nodeString = node.NickName;
-                
-                // if node doesn't exist in component dictionary add it
+                fileTagsList.Add("Hydra");
+            }
+
+            // Return output
+            return fileTagsList;
+        }
+
+        private static Dictionary<string, int> buildActiveNodes(WorkspaceModel graph)
+        {
+            // Key-Value pairs of all unique nodes in graph and their counts
+            Dictionary<string, int> components = new Dictionary<string, int> { };
+            // Unique list of all packages required by graph
+            List<string> dependencies = new List<string>();
+
+            foreach (NodeModel node in graph.Nodes)
+            {
+                // Current node name
+                string nodeString = node.Name;
+
+                // If node doesn't exist in component dictionary add it
                 if (!components.Keys.Contains(nodeString))
                 {
                     components.Add(nodeString, 1);
                 }
 
-                // if node does already exist increment count by 1
-                else if (components.Keys.Contains(nodeString))
+                // If node does already exist increment count by 1
+                else
                 {
                     components[nodeString] += 1;
                 }
             }
 
-            // TODO this should be rewritten referencing builtincategories (avoid hard coding categories)
-            // here we determine if any nodes are packages (not "out of the box")
-            // build list of stock node categories
-            List<string> stockDependencies = new List<string>();
-            stockDependencies.Add("Analyze");
-            stockDependencies.Add("BuiltIn");
-            stockDependencies.Add("Core");
-            stockDependencies.Add("Display");
-            stockDependencies.Add("Geometry");
-            stockDependencies.Add("Office");
-            stockDependencies.Add("Operators");
-            stockDependencies.Add("Input/Output");
+            // Return output
+            return components;
+        }
 
-            // check to see if node is in a stock category
-            // if not in category add as dependency node
+        private static List<string> buildDependencies(WorkspaceModel graph)
+        {
             List<string> dependencies = new List<string>();
 
-            foreach (var node in graph.Nodes)
+            // TODO remove harcoded built-in categories
+            string[] builtinNodeCategories = new string[]
             {
-                // container for package related node
-                string dependentCategory;
+                "Dictionary",
+                "Display",
+                "Geometry",
+                "ImportExport",
+                "Input",
+                "List",
+                "Math",
+                "Script",
+                "String"
+            };
 
-                // if node isn't in a stock category proceed
-                if (stockDependencies.Any(node.Category.Contains) == false)
+            foreach (NodeModel node in graph.Nodes)
+            {
+                string nodeCategory;
+
+                // If node isn't part of a built-in category proceed
+                if (builtinNodeCategories.Any(node.Category.Contains) == false)
                 {
-                    // if the new dependecy category contains sub categories 
+                    // If the new dependecy category contains sub-categories 
                     // slice it down to just the top level library name
                     if (node.Category.Contains('.'))
                     {
                         int index = node.Category.IndexOf('.');
-                        dependentCategory = node.Category.Substring(0, index);
+                        nodeCategory = node.Category.Substring(0, index);
                     }
 
-                    // if the new dependecy category doesn't contains sub categories
+                    // If the new dependecy category doesn't contains sub-categories
                     // grab entire library name
                     else
                     {
-                        dependentCategory = node.Category;
+                        nodeCategory = node.Category;
                     }
 
-                    // check to see if dependency has already been added to the master list
-                    // and verify a blank dependency name isn't added
-                    if (!dependencies.Contains(dependentCategory) && dependentCategory != "")
+                    // If dependency hasn't already been included and 
+                    // is not an empty string added it to master list
+                    if (!dependencies.Contains(nodeCategory) && nodeCategory != "")
                     {
-                        dependencies.Add(dependentCategory);
+                        dependencies.Add(nodeCategory);
                     }
                 }
             }
-            #endregion
 
-            #region Build Image List
-            // TODO consider rewriting (look into why json wants a list of dictionaries?)
+            // Return output
+            return dependencies;
+        }
 
-            // TODO enable ability to attach multiple images from outside file path
-            // ex: if addImgs != null append to dictionary (addImgs new input)
+        private static List<Dictionary<string, string>> buildImages()
+        {
+            List<Dictionary<string, string>> images = new List<Dictionary<string, string>>();
 
-            // dictionary containing canvas imagery
+            // Canvas Imagery
             Dictionary<string, string> canvasImages = new Dictionary<string, string>
             {
                 {"canvas.png", "Dynamo Definition"}
             };
-            // dictionary containing background preview imagery
+
+            // Background Preview Imagery
             Dictionary<string, string> backgroundPreviewImages = new Dictionary<string, string>
             {
                 {"background.png", "Dynamo Background Preview"}
             };
 
-            // list that contains formatted images
-            List<object> imageList = new List<object>();
-            imageList.Add(canvasImages);
-            imageList.Add(backgroundPreviewImages);
-            #endregion
+            images.Add(canvasImages);
+            images.Add(backgroundPreviewImages);
 
-            #region Build Dictionary of Metadata
-            // build full metadata dictionary for json
-            Dictionary<string, object> metadataDict = new Dictionary<string, object>
-            {
-                {"file", fileName + ".zip"},
-                {"thumbnail", "thumbnail.png"},
-                { "images", imageList},
-                // TODO implement video option
-                {"videos", "none"},
-                {"tags", fileTagsList},
-                {"components", components},
-                {"dependencies", dependencies}
-            };
-            #endregion
-
-            #region Check File Paths and Write Files
-            // check to see if master folder already exists
-            if (Directory.Exists(newFolderPath))
-            {
-                // verfiy user wants to overwrite existing version
-                DialogResult dialogResult = MessageBox.Show("The specified fileName/targetFolder combination already exists and will be overwritten.  Do you still wish to continue?", "Friendly Warning", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    Directory.Delete(newFolderPath, true);
-                }
-                else if (dialogResult == DialogResult.No)
-                {
-                    return;
-                }
-            }
-
-            // create master folder to hold Hydra content
-            Directory.CreateDirectory(newFolderPath);
-            // create temporary folder to hold dynamo file before zip
-            Directory.CreateDirectory(tempFolder);
-
-            // TODO add option to save from dialog box
-            // check to make sure file has been saved
-            if (String.IsNullOrEmpty(nodeView.ViewModel.DynamoViewModel.Model.CurrentWorkspace.FileName) == true)
-            {
-                MessageBox.Show("This file has not yet been saved.  Please save to continue.");
-                return;
-            }
-
-            // check to make sure the current dyn file is up to date with the canvas
-            if (nodeView.ViewModel.DynamoViewModel.HomeSpace.HasUnsavedChanges == true)
-            {
-                // TODO provide option to save or continue from dialog box
-                // alert user the canvas contained unsaved changes
-                // if user proceeds imagery may not correspond with current dyn file
-                MessageBox.Show("There are unsaved changes on the current canvas.  Hydra uses the last saved version of your Dynamo file.  This suggests imagery may not correspond with the last saved dyn file.");
-            }
-
-            // copy the last saved dyn file
-            File.Copy(nodeView.ViewModel.DynamoViewModel.Model.CurrentWorkspace.FileName.ToString(), dynamoSavePath);
-
-            // zip dyn
-            ZipFile.CreateFromDirectory(tempFolder, zipPath);
-            // delete temporary folder
-            Directory.Delete(tempFolder, true);
-
-            // save graph capture
-            nodeView.ViewModel.DynamoViewModel.OnRequestSaveImage(model, new ImageSaveEventArgs(canvasSavePath));
-
-            // TODO uncomment for version 1.4.0 (OnRequestSave3DImage not exposed in 1.2.0 or 1.3.0)
-            // save background preview capture
-            nodeView.ViewModel.DynamoViewModel.OnRequestSave3DImage(model, new ImageSaveEventArgs(backgroundSavePath));
-
-            // TODO provide option for background preview or canavs imagery for thumbnail in 1.3
-            // save thumbnail
-            var fullSize = System.Drawing.Image.FromFile(canvasSavePath);
-            var thumbnail = fullSize.GetThumbnailImage(200, 85, () => false, IntPtr.Zero);
-            thumbnail.Save(thumbNailPath);
-            // dispose or process may still be running when exporting multiple times causing crash
-            fullSize.Dispose();
-            thumbnail.Dispose();
-            
-            // write json from dictionary
-            string json = JsonConvert.SerializeObject(metadataDict);
-            File.WriteAllText(jsonPath, json);
-
-            // write README.md
-            string Tags = null;
-            foreach (string item in fileTagsList)
-            {
-                Tags += item + ",";
-            }
-            Tags = Tags.TrimEnd(',');
-            string readMe = String.Join(
-                Environment.NewLine,
-                "### Description",
-                fileDescription,
-                "### Version",
-                "File Version: " + versionNumber,
-                "### Tags",
-                Tags);
-            File.WriteAllText(readMePath, readMe);
-            #endregion
+            return images;
         }
+        #endregion
     }
 }
