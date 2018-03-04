@@ -1,1 +1,17 @@
-{"license":"","file_hash":null,"name":"Hydra","version":"2016.8.26","description":"Hydra project for publishing dynamo definitions to github.","group":"","keywords":null,"dependencies":[],"contents":"","engine_version":"1.0.0.1180","engine":"dynamo","engine_metadata":"","site_url":"","repository_url":"","contains_binaries":true,"node_libraries":["HydraDynamo.customization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null","HydraDynamo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "HydraHelperFunctions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"]}
+{
+    "license":"MIT",
+    "file_hash":null,
+    "name":"Hydra",
+    "version":"2018.3.04",
+    "description":"Hydra is a web platform that allows visual programming users to version and share files from Dynamo and Grasshopper directly to the Hydra Web Repo using git",
+    "group":"","keywords":["hydra","share","git","github","hydrashare","version","export","json","repo","web","search"],
+    "dependencies":[],
+    "contents":"",
+    "engine_version":"2.0.0.0000",
+    "engine":"dynamo",
+    "engine_metadata":"",
+    "site_url":"https://hydrashare.github.io/",
+    "repository_url":"https://github.com/HydraShare/hydra-dynamo",
+    "contains_binaries":true,
+    "node_libraries":["HydraDynamo.customization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null","HydraDynamo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "HydraHelperFunctions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"]
+}
