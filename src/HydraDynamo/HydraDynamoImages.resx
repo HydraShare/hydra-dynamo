@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="Hydra.HydraShare.Large" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="Hydra.HydraNodeModel.Large" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         wwAADsMBx2+oZAAAHOtJREFUeF7tnQW0G7fTxVNmZkqZmZmZIWVmZuY2xbRNmenfNIUUUmZmZk65KTMz
@@ -247,7 +247,7 @@
         TXO5kIZkKrlXyBbqdwhvEJL1dIaQRsZwY189tlYbQg24Hj3+DwH+l7focaLeAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="Hydra.HydraShare.Small" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="Hydra.HydraNodeModel.Small" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         wwAADsMBx2+oZAAABbdJREFUWEetV1tIlmkQ/izX401ilqFosXYQljLyIkjKVNBSLLQQ7SJIuogupKMF

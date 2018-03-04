@@ -5,7 +5,6 @@ using System.IO.Compression;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using Dynamo.Controls;
 using Dynamo.Graph.Nodes;
 using Dynamo.Graph.Workspaces;
 using Dynamo.ViewModels;
@@ -30,7 +29,7 @@ namespace Hydra.HydraHelperFunctions
         {
             InputData = data;
 
-            if(InputData.Count() != 6)
+            if(InputData.Count() != 7)
             {
                 MessageBox.Show("Incorrect input count.");
                 return;
@@ -53,6 +52,7 @@ namespace Hydra.HydraHelperFunctions
             string changeLog = InputData[3];
             string fileTags = InputData[4];
             string targetFolder = InputData[5];
+            string thumbnailType = InputData[6];
 
             // define all file paths
             string newFolderPath = (targetFolder + "\\" + fileName);
@@ -107,8 +107,6 @@ namespace Hydra.HydraHelperFunctions
                 // Create temporary folder to hold dynamo file before zip
                 Directory.CreateDirectory(tempFolder);
 
-                // Save dynamo file to hydra location
-                // UPDATE EVERYTHING BELOW HERE WHEN READING NODE UI DATA IS COMPLETE
                 // Check to make sure file has been saved
                 if (String.IsNullOrEmpty(dynamoViewModel.Model.CurrentWorkspace.FileName) == true)
                 {
@@ -121,15 +119,15 @@ namespace Hydra.HydraHelperFunctions
                 {
                     // Alert user the canvas contained unsaved changes
                     // If user proceeds imagery may not correspond with current dyn file
-                    MessageBox.Show("There are unsaved changes on the current canvas.  Hydra uses the last saved version of your Dynamo file.  This suggests imagery may not correspond with the last saved dyn file.");
+                    MessageBox.Show("There are unsaved changes on the current canvas.  Please save and re=share to export the latest changes.");
                 }
 
-                // copy the last saved dyn file
+                // Copy the last saved dyn file
                 File.Copy(dynamoViewModel.Model.CurrentWorkspace.FileName.ToString(), dynamoSavePath);
 
-                // zip dyn
+                // Zip dyn
                 ZipFile.CreateFromDirectory(tempFolder, zipPath);
-                // delete temporary folder
+                // Delete temporary folder
                 Directory.Delete(tempFolder, true);
 
                 // Save canvas imagery
@@ -138,11 +136,13 @@ namespace Hydra.HydraHelperFunctions
                 // Save background preview imagery
                 dynamoViewModel.OnRequestSave3DImage("Hydra", new ImageSaveEventArgs(backgroundSavePath));
 
-                // TODO provide option for background preview or canavs imagery for thumbnail in 1.3
                 // Save thumbnail
-                var fullSize = System.Drawing.Image.FromFile(canvasSavePath);
+                System.Drawing.Image fullSize;
+                if(thumbnailType == "GeometryView") { fullSize = System.Drawing.Image.FromFile(backgroundSavePath); }
+                else { fullSize = System.Drawing.Image.FromFile(canvasSavePath); }
                 var thumbnail = fullSize.GetThumbnailImage(200, 85, () => false, IntPtr.Zero);
                 thumbnail.Save(thumbNailPath);
+
                 // Dispose or process may still be running when exporting multiple times causing crash
                 fullSize.Dispose();
                 thumbnail.Dispose();
@@ -171,8 +171,14 @@ namespace Hydra.HydraHelperFunctions
 
             catch(Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(
+                    "Failed to export files to specified location.  Please verify read/write access to specified path and try again." +
+                    "\n\n Error: \n" + ex.ToString()
+                    );
             }
+
+            // Dialog confirming successful execution time
+            MessageBox.Show("Hydra Executed " + String.Format("{0:f}", DateTime.Now));
         }
 
         #region Utility Functions

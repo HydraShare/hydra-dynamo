@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
 using Dynamo.Graph.Nodes;
 using Dynamo.Controls;
 using Dynamo.UI.Commands;
@@ -14,19 +12,19 @@ using Hydra.HydraHelperFunctions;
 namespace Hydra
 {
     /*
-    Hydra: A Plugin for example file sharing
+    Hydra: A plugin for example file sharing
      
-    Use this component to export your dyn file to your Hydra repository so that you can upload and share with the community!
+    Use this node to export your dyn file to your Hydra repository so that you can upload and share with the community!
     Args:
-         fileName: A text name for your example file.
-         fileDescription: A text description of your example file.  This can be a list and each item will be written as a new paragraph.
-         versionNumber: A numerical input for the example file version.
-         changeLog_: A text description of the changes that you have made to the file if this is a new version of an old example file.
-         fileTags_: An optional list of test tags to decribe your example file.  This will help others search for your file easily.
-         targetFolder_: Input a directory path here to the hydra folder on you machine if you are not using the default Github structure that places your hydra github repo in your documents folder.
-         additionalImgs_: A list of file paths to additional images that you want to be shown in your Hydra page
+         File Name: A text name for your example file.
+         Description: A text description of your example file.
+         Version: A numerical input for the example file version.
+         Change Log: A text description of the changes that you have made to the file if this is a new version of an old example file.
+         File Tags: A list of tags to decribe your example file.  This will help others search for your file easily.
+         Target Folder: Input a directory path here to the hydra folder on you machine. This is the local clone of your GitHub Hydra fork.
+         Thumbnail: Select either `GraphView` or `GeometryView` for example web thumbnail.
     Returns:
-          readMe: String
+          README: UI data from HydraNodeModel
     */
 
     /// <summary>
@@ -34,7 +32,7 @@ namespace Hydra
     /// </summary>
     [NodeName("Hydra")]
     [NodeCategory("Hydra")]
-    [NodeDescription("Export Dynamo files to Hydra repository so that you can upload and share with the community!")]
+    [NodeDescription("Export Dynamo graphs to a Hydra GitHub repository so that you can share with the community!")]
     [OutPortTypes("string")]
     [IsDesignScriptCompatible]
     public class HydraNodeModel : NodeModel
@@ -45,7 +43,11 @@ namespace Hydra
         private string version = "2.0.0";
         private string changeLog = "Notes:\n - New Node UI\n - Dynamo 2.0 Compliant";
         private string fileTags = "hydra, dynamo, upload, example, share, sample";
-        private string targetFolder = @"C:\Users\alfarok\Desktop\HydraTest";
+        private string targetFolder = @"C:\..\HydraCloneLocation";
+        private string thumbnailType = "GeometryView";
+
+        private bool graphThumbnail = false;
+        private bool geometryThumbnail = true;
         private Dynamo.ViewModels.DynamoViewModel dynamoModel;
         #endregion
 
@@ -58,6 +60,7 @@ namespace Hydra
             {
                 fileName = value;
                 RaisePropertyChanged("NodeFileName");
+                OnNodeModified();
             }
         }
 
@@ -68,6 +71,7 @@ namespace Hydra
             {
                 description = value;
                 RaisePropertyChanged("NodeDescription");
+                OnNodeModified();
             }
         }
 
@@ -78,6 +82,7 @@ namespace Hydra
             {
                 version = value;
                 RaisePropertyChanged("NodeVersion");
+                OnNodeModified();
             }
         }
 
@@ -88,6 +93,7 @@ namespace Hydra
             {
                 changeLog = value;
                 RaisePropertyChanged("NodeChangeLog");
+                OnNodeModified();
             }
         }
 
@@ -98,6 +104,7 @@ namespace Hydra
             {
                 fileTags = value;
                 RaisePropertyChanged("NodeFileTags");
+                OnNodeModified();
             }
         }
 
@@ -108,6 +115,43 @@ namespace Hydra
             {
                 targetFolder = value;
                 RaisePropertyChanged("NodeTargetFolder");
+                OnNodeModified();
+            }
+        }
+
+        // TODO consolidate radio buttons
+        public string ThumbnailType
+        {
+            get { return thumbnailType; }
+            set
+            {
+                thumbnailType = value;
+                OnNodeModified();
+            }
+        }
+
+        public bool GraphThumbnail
+        {
+            get { return graphThumbnail; }
+            set
+            {
+                graphThumbnail = value;
+
+                if(value == true) { ThumbnailType = "GraphView"; }
+
+                else { ThumbnailType = "GeometryView"; }
+
+                RaisePropertyChanged("GraphThumbnail");
+            }
+        }
+
+        public bool GeometryThumbnail
+        {
+            get { return geometryThumbnail; }
+            set
+            {
+                geometryThumbnail = value;
+                RaisePropertyChanged("GeometryThumbnail");
             }
         }
 
@@ -134,7 +178,7 @@ namespace Hydra
         #region Constructors
         public HydraNodeModel()
         {
-            OutPorts.Add(new PortModel(PortType.Output, this, new PortData("Results", "Null if incomplete.")));
+            OutPorts.Add(new PortModel(PortType.Output, this, new PortData("README", "Hydra data output.")));
             RegisterAllPorts();
             ArgumentLacing = LacingStrategy.Disabled;
             SubmitCommand = new DelegateCommand(SubmitData, CanSubmitData);
@@ -155,16 +199,6 @@ namespace Hydra
 
         private void SubmitData(object obj)
         {
-            // TODO this can be remove or turned off
-            MessageBox.Show(
-                this.FileName + "\n" +
-                this.Description + "\n" +
-                this.Version + "\n" +
-                this.ChangeLog + "\n" +
-                this.FileTags + "\n" +
-                this.TargetFolder
-                );
-
             // Wrap input data
             string[] data = new string[]
             {
@@ -173,7 +207,8 @@ namespace Hydra
                 this.Version,
                 this.ChangeLog,
                 this.FileTags,
-                this.TargetFolder
+                this.TargetFolder,
+                this.ThumbnailType
             };
 
             // TODO remove DynamoModel parameter
@@ -187,7 +222,7 @@ namespace Hydra
         public override IEnumerable<AssociativeNode> BuildOutputAst(List<AssociativeNode> inputAstNodes)
         {
             // TODO if any null inputs return null node
-            if(false)
+            if (false)
             {
                 return new[]
                 {
@@ -198,16 +233,18 @@ namespace Hydra
             {
                 return new[]
                 {
-                    AstFactory.BuildAssignment(GetAstIdentifierForOutputIndex(0), 
+                    AstFactory.BuildAssignment(GetAstIdentifierForOutputIndex(0),
                     AstFactory.BuildStringNode
                     (
+                        "Data updated: \n" + String.Format("{0:f}", DateTime.Now) + "\n" +
                         this.FileName + "\n" +
                         this.Description + "\n" +
                         this.Version + "\n" +
                         this.ChangeLog + "\n" +
                         this.FileTags + "\n" +
-                        this.TargetFolder
-                        ))
+                        this.TargetFolder + "\n" +
+                        this.ThumbnailType
+                    ))
                 };
             }
         }
@@ -221,7 +258,7 @@ namespace Hydra
                 HydraShareControl hydraControl = new HydraShareControl();
                 nodeView.inputGrid.Children.Add(hydraControl);
 
-                // TODO - VERIFY THIS IS SAFE (COULD BE A TERRIBLE IDEA...)
+                // TODO - VERIFY THIS IS SAFE
                 // Store a reference to the DynamoViewModel
                 model.DynamoModel = nodeView.ViewModel.DynamoViewModel;
 

@@ -159,8 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="HydraDynamoImages.resx" />
-    <EmbeddedResource Include="Resources\Hydra.HydraShare.Large.png" />
-    <EmbeddedResource Include="Resources\Hydra.HydraShare.Small.png" />
+    <EmbeddedResource Include="Resources\Hydra.HydraNodeModel.Large.png" />
+    <EmbeddedResource Include="Resources\Hydra.HydraNodeModel.Small.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HydraHelperFunctions\HydraHelperFunctions.csproj">
@@ -170,9 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Hydra.HydraShare.NodeLogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">

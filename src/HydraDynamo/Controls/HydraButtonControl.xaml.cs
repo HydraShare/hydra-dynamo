@@ -24,6 +24,8 @@ namespace Hydra
             if (openFolderDialog.ShowDialog() == DialogResult.OK)
             {
                 targetFolder.Text = openFolderDialog.SelectedPath;
+                var hydraNodeModel = this.DataContext as HydraNodeModel;
+                hydraNodeModel.TargetFolder = targetFolder.Text;
             }
         }
 
