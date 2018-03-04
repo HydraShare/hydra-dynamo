@@ -2,16 +2,58 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="335" d:DesignWidth="325">
     <Grid Name="CustomUIGrid">
+
+        <!--Tags-->
         <StackPanel>
-            <Button Command="{Binding MessageCommand}" Height="50" Width="50" Margin="5" >
-                <Button.Background>
-                    <ImageBrush Stretch="Uniform" ImageSource="..\Resources\Hydra.HydraShare.NodeLogo.png"/>
-                </Button.Background>
-            </Button>
+            <StackPanel Name="MainFields" Orientation="Horizontal" Visibility="Visible">
+                <StackPanel>
+                    <TextBlock Text="File Name:" Margin="12,10,10,0" Foreground="#FF5E5C5A" Height="18"/>
+                    <TextBlock Text="Description:" Margin="12,10,10,0" Foreground="#FF5E5C5A" Height="18"/>
+                    <TextBlock Text="Version:" Margin="12,60,10,0" Foreground="#FF5E5C5A" Height="18"/>
+                    <TextBlock Text="Change Log:" Margin="12,10,10,0" Foreground="#FF5E5C5A" Height="18"/>
+                    <TextBlock Text="File Tags:" Margin="12,60,10,0" Foreground="#FF5E5C5A" Height="18"/>
+                    <TextBlock Text="Target Folder:" Margin="12,10,10,0" Foreground="#FF5E5C5A" Height="18"/>
+                    <TextBlock Text="Thumbnail:" Margin="12,10,10,0" Foreground="#FF5E5C5A" Height="18"/>
+
+                </StackPanel>
+
+                <!--Fields-->
+                <StackPanel Margin="-5,0,0,0">
+                    <TextBox  Name="fileName" Text="{Binding FileName}"  Width="220" Margin="0,10,12,0" VerticalAlignment="Stretch" HorizontalAlignment="Right" Foreground="#FF5E5C5A" Background="#FFE5E2DE" />
+                    <TextBox  Name="description" Text="{Binding Description}"  Width="220" Margin="0,10,12,0" VerticalAlignment="Top" HorizontalAlignment="Right" Foreground="#FF5E5C5A" Height="70" Background="#FFE5E2DE" AcceptsReturn="True" />
+                    <TextBox  Name="version" Text="{Binding Version}"  Width="220" Margin="0,10,12,0" VerticalAlignment="Stretch" HorizontalAlignment="Right" Foreground="#FF5E5C5A" Background="#FFE5E2DE" />
+                    <TextBox  Name="changeLog" Text="{Binding ChangeLog}"  Width="220" Margin="0,10,12,0" VerticalAlignment="Top" HorizontalAlignment="Right" Foreground="#FF5E5C5A" Height="70" Background="#FFE5E2DE" AcceptsReturn="True" />
+                    <TextBox  Name="fileTags" Text="{Binding FileTags}"  Width="220" Margin="0,10,12,0" VerticalAlignment="Stretch" HorizontalAlignment="Right" Foreground="#FF5E5C5A" Background="#FFE5E2DE" />
+                    <TextBox  Name="targetFolder" Text="{Binding TargetFolder}"  Width="220" Margin="0,10,12,0" VerticalAlignment="Stretch" HorizontalAlignment="Right" Foreground="#FF5E5C5A" Background="#FFE5E2DE" />
+                    <Button Name="TargetFolderButton" Click="SetDirectory" Height="18" Width="18" Margin="0,-19,12,0" VerticalAlignment="Stretch" HorizontalAlignment="Right" Foreground="#FFE5E2DE" BorderBrush="{x:Null}" Background="#FFE5E2DE">
+                        <Button.Content>
+                            <TextBlock Foreground="#FFABADB3"  Margin="0,-9,0,0">...</TextBlock>
+                        </Button.Content>
+                    </Button>
+                    <StackPanel Margin="0,10,0,10" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <RadioButton GroupName="thumbnail" Content="Graph View" IsChecked="{Binding GraphThumbnail}" Foreground="#FF5E5C5A" Margin="0,0,20,0"/>
+                        <RadioButton GroupName="thumbnail" Content="Geometry View" IsChecked="{Binding GeometryThumbnail}" Foreground="#FF5E5C5A"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <!--LowerButtons-->
+            <StackPanel Name="LowerButtons" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Button Name="CollapseButton" Click="Collapse" Height="18" Width="75">
+                    <Button.Content>
+                        <TextBlock Name="CollapseButtonText" Foreground="#FF5E5C5A">Collapse</TextBlock>
+                    </Button.Content>
+                </Button>
+                <Button Name="SubmitButton" Command="{Binding SubmitCommand}" Height="18" Width="75">
+                    <Button.Content>
+                        <TextBlock Foreground="#FF5E5C5A">Share</TextBlock>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

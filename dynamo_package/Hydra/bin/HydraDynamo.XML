@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HydraDynamo</name>
+    </assembly>
+    <members>
+        <member name="T:Hydra.HydraNodeModel">
+            <summary>
+            Hydra node implementation.
+            </summary>
+        </member>
+        <member name="T:Hydra.HydraShareControl">
+            <summary>
+            HydraShareControl
+            </summary>
+        </member>
+        <member name="M:Hydra.HydraShareControl.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Hydra.HydraShareControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+    </members>
+</doc>
